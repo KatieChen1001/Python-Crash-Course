@@ -1,0 +1,4 @@
+#3.4 Guest List 
+guest_list = ["Mike", "Rayan", "Rakshak"]
+message = "Hi" + guest_list[0].title() + ", I'd like invite you to dinner"
+print(message)
