@@ -10,6 +10,11 @@ Process
 	- move check events into game_function module
 5. Let user move ship (in game_functions)
 6. let user move ship continueously
+7. build Bullet.py class
+	- store bullet width, length, speed, color in ai_setting 
+	- function update()
+	- function pygame.draw.rect() 
+8. 
 
 """
 
@@ -18,6 +23,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 import game_functions as gf
+from pygame.sprite import Group
 
 def run_game():
 	#Initialize game and create a screen object 
@@ -28,11 +34,14 @@ def run_game():
 	
 	# Make a ship
 	ship = Ship(ai_settings, screen)
+	# Make a group to srore bullets in. 
+	bullets = Group()
 	
 	#Start the main loop for the game 
 	while True:
-		gf.check_events(ship)
+		gf.check_events(ai_settings, screen, ship, bullets)
 		ship.update()
-		gf.update_screen(ai_settings, screen, ship)
+		gf.update_bullets(bullets)
+		gf.update_screen(ai_settings, screen, ship, bullets)
 		
 run_game()
