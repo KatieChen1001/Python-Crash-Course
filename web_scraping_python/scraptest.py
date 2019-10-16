@@ -4,7 +4,7 @@ from urllib.error import URLError
 from bs4 import BeautifulSoup
 
 
-html = urlopen('http://www.pythonscraping.com/pages/page3.html')
+html = urlopen('http://fund.eastmoney.com/fund.html#os_0;isall_0;ft_;pt_1')
 bs = BeautifulSoup(html.read(), 'html.parser')
-for sibling in bs.find('table', {'id':'giftList'}).tr.next_siblings:
-	print(sibling)
+my_table = bs.find('tr', {'id':'tr006817'})
+print(my_table)
