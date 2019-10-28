@@ -53,7 +53,7 @@ def update_screen(ai_settings, screen, ship, bullets, aliens):
 		bullet.draw_bullet()
 	
 	ship.blitme()
-	aliens.blitme()
+	aliens.draw(screen)
 	
 
 	#Make the most recently drawn screen visible
