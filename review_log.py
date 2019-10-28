@@ -20,15 +20,20 @@ while typing:
 		print(taglist)
 	
 	else: 
-		for tags in taglist: 
-			if tags['tagName'] == new_tag_name: 
-				print("this tag already exists")
-				count = int(tags['counter'])
-				tags['counter'] = count + 1
-				print(taglist)
-			else: 
-				print("got a new tag")
-				taglist.append({'tagName': new_tag_name, 'counter': 1})
-				
+		
+		for index in range(len(taglist)):
+			for key in taglist[index]: 
+				print(taglist[index][key])
+		
+		# for tags in taglist: 
+			# if tags['tagName'] == new_tag_name: 
+				# print("this tag already exists")
+				# count = int(tags['counter'])
+				# tags['counter'] = count + 1
+				# print(taglist)
+			# else: 
+				# print("got a new tag")
+				# taglist.append({'tagName': new_tag_name, 'counter': 1})
+				# break
 	
 		
