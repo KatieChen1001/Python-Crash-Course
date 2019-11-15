@@ -1,3 +1,20 @@
 {
-	
+    "app does not recognize wda": 7,
+    "cannot update": 32,
+    "disconnects": 6,
+    "does not connect": 22,
+    "does not know what the app does": 2,
+    "does not recognize wda": 1,
+    "include app natively": 1,
+    "need error message": 4,
+    "need more platform support": 1,
+    "overheat": 2,
+    "pc wont connect to wda": 1,
+    "pixelation": 3,
+    "resolution changes when reconnect": 1,
+    "top tool bar sucks": 1,
+    "top toolbar sucks": 5,
+    "want to rename wda": 1,
+    "want to use shorter pin": 1,
+    "wired ethernet support": 1
 }
