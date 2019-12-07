@@ -33,14 +33,14 @@ default_max_rounds = 10
 elements = "RGBY"
 
 def new_round():
-	new_round = input("Would you like another round?\nAnswer 'y' or 'n'. ")
-	if new_round.upper() == "Y":
+	user_new_round = input("Would you like another round?\nAnswer 'y' or 'n'.")
+	if user_new_round.upper() == "Y":
 		start_round(default_max_rounds)
-	elif new_round.upper() == "N":
+	elif user_new_round.upper() == "N":
 		sys.exit()
 	else: 
-		print("You have not entered a valid response. ")
-		new_round()
+		print("You have not entered a valid response.")
+		return new_round()
 
 def enter_input():
 	# enter_input() checks the validity of user's guess
