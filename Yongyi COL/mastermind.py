@@ -47,6 +47,7 @@ def enter_input():
 	user_input = input("Please enter your guess. Letter sequencing matters. \nYou may enter 'q' at any time to end the game. Your guess: ")
 	if user_input.upper() == "Q":
 		sys.exit()
+		# Add another check to make sure users type in only RGBY and no other letters.
 	if len(user_input) == 4: 
 		return user_input
 	else:	
@@ -55,7 +56,7 @@ def enter_input():
 
 def duplicate():
 	# duplicate(): 1. asks if user want to have duplicate color 2. generate the answer key based on user selection
-	duplication = input("Would you like to have duplicate colors?\n Answer with 'y' or 'n'. ")
+	duplication = input("Would you like to have duplicate colors?\n Answer with 'y' or 'n'. Your answer: ")
 	if duplication.upper() == "Y": 
 		return ''.join(random.choices(elements, k=len(elements)))
 	elif duplication.upper() == "N":
@@ -86,7 +87,7 @@ def start_round(max_rounds):
 		rounds += 1
 		print("You have " + str(max_rounds - rounds) + " rounds left") 
 	if flag: 
-		print("You have ran out of rounds")
+		print("You have ran out of rounds. \n The correct answer is " + shuffled_elements)
 		new_round()
 
 start_round(default_max_rounds)
