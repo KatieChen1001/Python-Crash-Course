@@ -9,6 +9,7 @@
 // BONUS FEATURES:
 // 1. Add timer
 // 2. Add game instructions
+// 3. Make everything responsive
 
 // TODO:
 
@@ -16,12 +17,9 @@ let canvasWidth = 800;
 let canvasHeight = 500;
 let canvasSpacing = 100;
 let backgroundColor = 250;
-// Ball radius equals to 10% of canvas width
 let ballDiameter = 40;
 let ballRadius = ballDiameter / 2;
 let ballSpacing = ballRadius / 2;
-
-let ballSelected = false;
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -53,6 +51,7 @@ class Ball {
     this.y = y;
     this.diameter = ballDiameter;
     this.ballColor = ballColor;
+    this.ballHovered = false;
   }
 
   draw() {
@@ -61,8 +60,36 @@ class Ball {
     circle(this.x, this.y, this.diameter);
   }
 
-  isBallClicked(ballSelected) {
-    // check which ball mouse is hovering over
+  isBallHovered() {
+    // check which ball the mouse is hovering over
+    // changed the hovered ball stroke to red
+    let rad = this.diameter / 2;
+    let ballRangeLeft = this.x - rad;
+    let ballRangeRight = this.x + rad;
+    let ballRangeTop = this.y - rad;
+    let ballRangeBottom = this.y + rad;
+    if (
+      mouseX < ballRangeRight &&
+      mouseX > ballRangeLeft &&
+      mouseY < ballRangeBottom &&
+      mouseY > ballRangeTop
+    ) {
+      strokeWeight(2);
+      stroke("red");
+      fill(color(this.ballColor));
+      circle(this.x, this.y, this.diameter);
+      this.ballHovered = true;
+    } else {
+      noStroke();
+      fill(color(this.ballColor));
+      circle(this.x, this.y, this.diameter);
+      this.ballHovered = false;
+    }
+  }
+
+  isBallClicked(ballHovered) {
+    // check which ball the mouse is hovering over
+    // changed the hovered ball stroke to red
     let rad = this.diameter / 2;
     let ballRangeLeft = this.x - rad;
     let ballRangeRight = this.x + rad;
@@ -75,7 +102,7 @@ class Ball {
       mouseY > ballRangeTop
     ) {
       // set the clicked ball stroke to red based on whether the user clicked the ball or not
-      if (ballSelected) {
+      if (ballHovered) {
         strokeWeight(2);
         stroke("red");
         fill(color(this.ballColor));
@@ -129,7 +156,44 @@ function generateBallPalette() {
 // Display scoreboard for each round
 function scoreBoard() {}
 
-let selectedBall;
+let ballHovered = false;
+let ballSelected = false;
+let currentSelectedBall;
+
+function mouseClicked() {
+  // press once to select ball
+  for (let i = 0; i < balls.length; i++) {
+    let rad = ballDiameter / 2;
+    let ballRangeLeft = balls[i].x - rad;
+    let ballRangeRight = balls[i].x + rad;
+    let ballRangeTop = balls[i].y - rad;
+    let ballRangeBottom = balls[i].y + rad;
+    if (
+      mouseX < ballRangeRight &&
+      mouseX > ballRangeLeft &&
+      mouseY < ballRangeBottom &&
+      mouseY > ballRangeTop
+    ) {
+      ballSelected = true;
+      let selectedBall = new Ball(
+        mouseX,
+        mouseY,
+        ballDiameter,
+        balls[i].ballColor
+      );
+      print("somthign");
+      currentSelectedBall = selectedBall;
+      print(currentSelectedBall);
+    }
+  }
+}
+
+function mouseDragged() {
+  if (ballSelected) {
+    currentSelectedBall.x = mouseX;
+    currentSelectedBall.y = mouseY;
+  }
+}
 
 function draw() {
   background(backgroundColor);
@@ -138,29 +202,17 @@ function draw() {
     balls[i].draw();
   }
   drawGrid();
-  // iterate through ball position in ball palette
-  for (let i = 0; i < balls.length; i++) {
-    balls[i].isBallClicked(ballSelected);
-    selectedBall = new Ball(
-      mouseX,
-      mouseY,
-      balls[i].diameter,
-      balls[i].ballColor
-    );
+  if (ballSelected) {
+    currentSelectedBall.draw();
   }
-  selectedBall.draw();
 }
+// press again to deselect ball
+// ballSelected = !ballSelected;
+// selectedBall.x = mouseX;
+// selectedBall.y = mouseY;
+// print(selectedBall.x);
 
-function mousePressed() {
-  // press once to select ball
-  // press again to deselect ball
-  ballSelected = !ballSelected;
-  selectedBall.x = mouseX;
-  selectedBall.y = mouseY;
-  print(selectedBall.x);
-}
 //
-function mouseDragged() {
-  selectedBall.x = mouseX;
-  selectedBall.y = mouseY;
-}
+
+//
+// function mouseClicked() {}
