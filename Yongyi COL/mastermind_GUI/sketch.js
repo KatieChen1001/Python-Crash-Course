@@ -1,15 +1,16 @@
 // draw 8 balls of different color
 // randomly choose 4 out of 8 colors store
-// each ball will be a class
-// every click generates a new ball object
-// mousePressed() choose a ball
-// mouseDragged() ball follow curse
-// mouseClicked() draw ball at location (confine it to grid)
+// click ball, highlight ball, get ball color
+// click square
+// onClick Check:
+// - check if ball clicked, yes: get ball colors, ballSelected to true
+// - check if square clicked, if ballSelected is true, draw ball in square center
 
 // BONUS FEATURES:
 // 1. Add timer
 // 2. Add game instructions
 // 3. Make everything responsive
+// 4. Add give up button for each round
 
 // TODO:
 
@@ -20,6 +21,8 @@ let backgroundColor = 250;
 let ballDiameter = 40;
 let ballRadius = ballDiameter / 2;
 let ballSpacing = ballRadius / 2;
+
+// let buttonCheck = createButton("Check");
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -51,7 +54,7 @@ class Ball {
     this.y = y;
     this.diameter = ballDiameter;
     this.ballColor = ballColor;
-    this.ballHovered = false;
+    this.ballSelected = false;
   }
 
   draw() {
@@ -60,36 +63,20 @@ class Ball {
     circle(this.x, this.y, this.diameter);
   }
 
-  isBallHovered() {
-    // check which ball the mouse is hovering over
-    // changed the hovered ball stroke to red
-    let rad = this.diameter / 2;
-    let ballRangeLeft = this.x - rad;
-    let ballRangeRight = this.x + rad;
-    let ballRangeTop = this.y - rad;
-    let ballRangeBottom = this.y + rad;
-    if (
-      mouseX < ballRangeRight &&
-      mouseX > ballRangeLeft &&
-      mouseY < ballRangeBottom &&
-      mouseY > ballRangeTop
-    ) {
-      strokeWeight(2);
-      stroke("red");
-      fill(color(this.ballColor));
-      circle(this.x, this.y, this.diameter);
-      this.ballHovered = true;
-    } else {
-      noStroke();
-      fill(color(this.ballColor));
-      circle(this.x, this.y, this.diameter);
-      this.ballHovered = false;
-    }
+  update() {
+    this.x = mouseX;
+    this.y = mouseY;
   }
 
-  isBallClicked(ballHovered) {
-    // check which ball the mouse is hovering over
-    // changed the hovered ball stroke to red
+  xloc() {
+    return this.x;
+  }
+
+  yloc() {
+    return this.y;
+  }
+
+  isBallClicked() {
     let rad = this.diameter / 2;
     let ballRangeLeft = this.x - rad;
     let ballRangeRight = this.x + rad;
@@ -101,17 +88,10 @@ class Ball {
       mouseY < ballRangeBottom &&
       mouseY > ballRangeTop
     ) {
-      // set the clicked ball stroke to red based on whether the user clicked the ball or not
-      if (ballHovered) {
-        strokeWeight(2);
-        stroke("red");
-        fill(color(this.ballColor));
-        circle(this.x, this.y, this.diameter);
-      } else {
-        noStroke();
-        fill(color(this.ballColor));
-        circle(this.x, this.y, this.diameter);
-      }
+      print("");
+      return this.ballColor;
+    } else {
+      return undefined;
     }
   }
 }
@@ -158,61 +138,48 @@ function scoreBoard() {}
 
 let ballHovered = false;
 let ballSelected = false;
-let currentSelectedBall;
+
+let userGuess = [];
+let locked = false;
 
 function mouseClicked() {
-  // press once to select ball
-  for (let i = 0; i < balls.length; i++) {
-    let rad = ballDiameter / 2;
-    let ballRangeLeft = balls[i].x - rad;
-    let ballRangeRight = balls[i].x + rad;
-    let ballRangeTop = balls[i].y - rad;
-    let ballRangeBottom = balls[i].y + rad;
-    if (
-      mouseX < ballRangeRight &&
-      mouseX > ballRangeLeft &&
-      mouseY < ballRangeBottom &&
-      mouseY > ballRangeTop
-    ) {
-      ballSelected = true;
-      let selectedBall = new Ball(
-        mouseX,
-        mouseY,
-        ballDiameter,
-        balls[i].ballColor
-      );
-      print("somthign");
-      currentSelectedBall = selectedBall;
-      print(currentSelectedBall);
+  let selectedBallColor;
+  if (!locked) {
+    for (let i = 0; i < balls.length; i++) {
+      if (balls[i].isBallClicked() != undefined) {
+        selectedBallColor = balls[i].isBallClicked();
+        print(typeof selectedBallColor);
+        print(selectedBallColor);
+        break;
+      }
     }
-  }
-}
-
-function mouseDragged() {
-  if (ballSelected) {
-    currentSelectedBall.x = mouseX;
-    currentSelectedBall.y = mouseY;
+    let selectedBall = new Ball(
+      mouseX,
+      mouseY,
+      ballDiameter,
+      selectedBallColor
+    );
+    userGuess.push(selectedBall);
+    locked = !locked;
+  } else {
+    locked = !locked;
   }
 }
 
 function draw() {
+  // ==== Setup the basics ==== //
   background(backgroundColor);
   generateBallPalette();
   for (let i = 0; i < balls.length; i++) {
     balls[i].draw();
   }
   drawGrid();
-  if (ballSelected) {
-    currentSelectedBall.draw();
+  // ==== draw user selected balls ==== //
+  for (let i = 0; i < userGuess.length; i++) {
+    userGuess[i].draw();
+    print(userGuess[i].xloc());
+    if (locked) {
+      userGuess[i].update();
+    }
   }
 }
-// press again to deselect ball
-// ballSelected = !ballSelected;
-// selectedBall.x = mouseX;
-// selectedBall.y = mouseY;
-// print(selectedBall.x);
-
-//
-
-//
-// function mouseClicked() {}
